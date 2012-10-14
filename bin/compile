@@ -22,10 +22,7 @@ LP_DIR=`cd $(dirname $0); cd ..; pwd`
 function deploy_opencv() {
   cd /app
   echo `pwd`
-  for i in `ls /app`; do echo $i; done;
-  echo $?
-  mkdir -p "/app/vendor"
-  for i in `ls /app`; do echo $i; done;
+  for i in `ls /app/vendor`; do echo $i; done;
   echo $?
   tar -xzf "$LP_DIR/vendor/opencv/opencv.tgz" -C "/app/vendor"
   echo $?
