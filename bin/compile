@@ -23,8 +23,9 @@ function deploy_opencv() {
   cd /app
   echo `pwd`
   for i in `ls /app/vendor`; do echo $i; done;
+  mkdir -p "/app/vendor/opencv"
   echo $?
-  tar -xzf "$LP_DIR/vendor/opencv/opencv.tgz" -C "/app/vendor"
+  tar -xzf "$LP_DIR/vendor/opencv/opencv.tgz" -C "/app/vendor/opencv"
   echo $?
   for i in `ls /app/vendor`; do echo $i; done;
   rm -rf "/app/vendor/opencv"
