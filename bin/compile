@@ -21,7 +21,7 @@ LP_DIR=`cd $(dirname $0); cd ..; pwd`
 
 function deploy_opencv() {
   cd $BUILD_DIR
-  echo pwd
+  echo `pwd`
   for i in `ls $BUILD_DIR`; do echo $i; done;
   echo $?
   mkdir -p "$BUILD_DIR/vendor"
