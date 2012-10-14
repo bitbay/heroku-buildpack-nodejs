@@ -5,4 +5,7 @@ cat <<EOF
 ---
 config_vars:
   PATH: bin:node_modules/.bin:/usr/local/bin:/usr/bin:/bin
+  CPLUS_INCLUDE_PATH=/app/vendor/opencv/include/opencv/:/app/vendor/opencv/include/opencv2/
+  LIBRARY_PATH=/app/vendor/opencv/lib/
+  PKG_CONFIG_PATH=/app/vendor/opencv/lib/pkgconfig/
 EOF

@@ -166,6 +166,9 @@ PATH="$VENDORED_SCONS:$VENDORED_NODE/bin:$PATH"
 INCLUDE_PATH="$VENDORED_NODE/include"
 export CPATH="$INCLUDE_PATH"
 export CPPPATH="$INCLUDE_PATH"
+export CPLUS_INCLUDE_PATH="/app/vendor/opencv/include/opencv/:/app/vendor/opencv/include/opencv2/"
+export LIBRARY_PATH="/app/vendor/opencv/lib/"
+export PKG_CONFIG_PATH="/app/vendor/opencv/lib/pkgconfig/"
 
 # install dependencies with npm
 echo "-----> Installing dependencies with npm"
