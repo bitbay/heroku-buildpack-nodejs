@@ -180,9 +180,6 @@ export CPLUS_INCLUDE_PATH="/app/vendor/opencv/include/opencv/:/app/vendor/opencv
 export LIBRARY_PATH="/app/vendor/opencv/lib/"
 export PKG_CONFIG_PATH="/app/vendor/opencv/lib/pkgconfig/"
 
-# deploying opencv
-deploy_opencv
-
 # install dependencies with npm
 echo "-----> Installing dependencies with npm"
 run_npm "install --production"
@@ -192,3 +189,6 @@ echo "Dependencies installed" | indent
 echo "-----> Building runtime environment"
 mkdir -p $BUILD_DIR/.profile.d
 echo "export PATH=\"\$HOME/bin:\$HOME/node_modules/.bin:\$PATH\"" > $BUILD_DIR/.profile.d/nodejs.sh
+
+# deploying opencv
+deploy_opencv
