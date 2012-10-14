@@ -20,17 +20,17 @@ CACHE_DIR=$2
 LP_DIR=`cd $(dirname $0); cd ..; pwd`
 
 function deploy_opencv() {
-  cd $BUILD_DIR
+  cd /app
   echo `pwd`
-  for i in `ls $BUILD_DIR`; do echo $i; done;
+  for i in `ls /app`; do echo $i; done;
   echo $?
-  mkdir -p "$BUILD_DIR/vendor"
-  for i in `ls $BUILD_DIR`; do echo $i; done;
+  mkdir -p "/app/vendor"
+  for i in `ls /app`; do echo $i; done;
   echo $?
-  tar -xzf "$LP_DIR/vendor/opencv/opencv.tgz" -C "$BUILD_DIR/vendor"
+  tar -xzf "$LP_DIR/vendor/opencv/opencv.tgz" -C "/app/vendor"
   echo $?
-  for i in `ls $BUILD_DIR/vendor`; do echo $i; done;
-  rm -rf "$BUILD_DIR/vendor/opencv"
+  for i in `ls /app/vendor`; do echo $i; done;
+  rm -rf "/app/vendor/opencv"
   echo $?
 }
 
