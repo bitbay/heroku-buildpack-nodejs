@@ -20,8 +20,8 @@ CACHE_DIR=$2
 LP_DIR=`cd $(dirname $0); cd ..; pwd`
 
 function deploy_opencv() {
-  mkdir -p "$BUILD_DIR/vendor"
-  tar -xzf "$LP_DIR/vendor/opencv/opencv.tgz" -C "$BUILD_DIR/vendor"
+  mkdir -p "$BUILD_DIR/vendorz"
+  #tar -xzf "$LP_DIR/vendor/opencv/opencv.tgz" -C "$BUILD_DIR/vendor"
 }
 
 function error() {
@@ -153,6 +153,7 @@ SCONS_PACKAGE="http://${S3_BUCKET}.s3.amazonaws.com/scons-${SCONS_VERSION}.tgz"
 VENDORED_NODE="$(mktmpdir node)"
 VENDORED_NPM="$(mktmpdir npm)"
 VENDORED_SCONS="$(mktmpdir scons)"
+VENDORED_OPENCV="$(mktmpdir opencv)"
 
 # download and unpack packages
 echo "-----> Fetching Node.js binaries"
