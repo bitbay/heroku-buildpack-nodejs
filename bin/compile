@@ -19,6 +19,13 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 LP_DIR=`cd $(dirname $0); cd ..; pwd`
 
+function deploy_opencv() {
+  OPENCV_DIR='opencv'
+  mkdir -p "$BUILD_DIR/vendor"
+  tar xzf $LP_DIR/vendor/opencv/opencv.tgz -C "$BUILD_DIR/vendor"
+  #done
+}
+
 function error() {
   echo " !     $*" >&2
   exit 1
@@ -169,6 +176,9 @@ export CPPPATH="$INCLUDE_PATH"
 export CPLUS_INCLUDE_PATH="/app/vendor/opencv/include/opencv/:/app/vendor/opencv/include/opencv2/"
 export LIBRARY_PATH="/app/vendor/opencv/lib/"
 export PKG_CONFIG_PATH="/app/vendor/opencv/lib/pkgconfig/"
+
+# deploying opencv
+deploy_opencv
 
 # install dependencies with npm
 echo "-----> Installing dependencies with npm"
