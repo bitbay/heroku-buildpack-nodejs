@@ -20,10 +20,8 @@ CACHE_DIR=$2
 LP_DIR=`cd $(dirname $0); cd ..; pwd`
 
 function deploy_opencv() {
-  OPENCV_DIR='opencv'
   mkdir -p "$BUILD_DIR/vendor"
-  tar xzf $LP_DIR/vendor/opencv/opencv.tgz -C "$BUILD_DIR/vendor"
-  #done
+  tar -xzf "$LP_DIR/vendor/opencv/opencv.tgz" -C "$BUILD_DIR/vendor"
 }
 
 function error() {
