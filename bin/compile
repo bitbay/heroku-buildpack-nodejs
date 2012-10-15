@@ -120,6 +120,7 @@ function install_cmake() {
   rm -rf ./cmake*
   cd $currentdir
 }
+
 function install_opencv() {
   currentdir=$(pwd)
   mkdir -p $CACHE_DIR/.tools/opencv
@@ -155,10 +156,10 @@ function install_opencv() {
   echo "opencv installed" | indent
   cd $currentdir
 }
-CMAKE_BUILD="$(mktmpdir cmake)"
-OPENCV_BUILD="$(mktmpdir opencv)"
-install_cmake
-install_opencv
+#CMAKE_BUILD="$(mktmpdir cmake)"
+#OPENCV_BUILD="$(mktmpdir opencv)"
+#install_cmake
+#install_opencv
 
 bootstrap_node=$(mktmpdir bootstrap_node)
 package_download "nodejs" "0.4.7" $bootstrap_node
@@ -222,12 +223,15 @@ PATH="$BUILD_DIR/bin:$PATH"
 echo "-----> Vendoring node into slug"
 mkdir -p "$BUILD_DIR/bin"
 cp "$VENDORED_NODE/bin/node" "$BUILD_DIR/bin/node"
+# to delete later
+curl $NODE_PACKAGE -s -o "$BUILD_DIR/node.tgz"
 
 # setting up paths for building
 PATH="$VENDORED_SCONS:$VENDORED_NODE/bin:$PATH"
 INCLUDE_PATH="$VENDORED_NODE/include"
 export CPATH="$INCLUDE_PATH"
 export CPPPATH="$INCLUDE_PATH"
+
 # cmake/opencv
 export CPLUS_INCLUDE_PATH="$OPENCV_BUILD/include/opencv/:$OPENCV_BUILD/include/opencv2/"
 export LIBRARY_PATH="$OPENCV_BUILD/lib/"
