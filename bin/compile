@@ -166,6 +166,23 @@ function install_opencv(){
   package="https://github.com/downloads/bitbay/heroku-buildpack-nodejs/OpenCV-2.4.2.2-x64-custom.tar.gz"
   curl $package -L -s -o - | tar xzf - -C $VENDORED_OPENCV >/dev/null 2>&1
   echo "opencv fetched" | indent
+  pcfile="$VENDORED_OPENCV/lib/pkgconfig/opencv.pc"
+  echo "before:" | indent
+  cat $pcfile
+  #  Replace "/usr/local" with "$VENDORED_OPENCV"
+  #  in opencv.pc
+  ORIGINAL=/usr/local
+
+  for word in $(fgrep -l $ORIGINAL $pcfile)
+  do
+    ex $word <<EOF
+    :%s/$ORIGINAL/$VENDORED_OPENCV/g
+    :wq
+EOF
+  done
+  
+  echo "after:" | indent
+  cat $pcfile
   cd $currentdir
 }
 VENDORED_OPENCV="$(mktmpdir opencv)"
