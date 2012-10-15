@@ -125,7 +125,7 @@ function install_opencv() {
   echo "-----> Fetching and installing opencv"
   cd $OPENCV_BUILD
   package="http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/2.4.2/OpenCV-2.4.2.tar.bz2"
-  curl $package -L -s -o - | tar xzf - >/dev/null 2>&1
+  curl $package -L -s -o - | tar xjf - >/dev/null 2>&1
   echo "opencv source downloaded $?" | indent
   echo "configuring opencv" | indent
   mkdir release && cd release
