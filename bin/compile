@@ -11,6 +11,7 @@ set -e
 unset GIT_DIR
 
 # config
+OPENCV_VERSION="2.4.2"
 SCONS_VERSION="1.2.0"
 S3_BUCKET="heroku-buildpack-nodejs"
 
@@ -124,11 +125,13 @@ function install_opencv() {
   mkdir -p $CACHE_DIR/.tools/opencv
   echo "-----> Fetching and installing opencv"
   cd $OPENCV_BUILD
-  package="http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/2.4.2/OpenCV-2.4.2.tar.bz2"
+  package="http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/$OPENCV_VERSION/OpenCV-$OPENCV_VERSION.tar.bz2"
   curl $package -L -s -o - | tar xjf - >/dev/null 2>&1
   echo "opencv source downloaded $?" | indent
   echo "configuring opencv" | indent
   mkdir release && cd release
+  #TODO: redirect cmake, make and makeinstall output to >/dev/null 2>&1
+  #TODO: add flags of opencv f
   cmake -D CMAKE_BUILD_TYPE=MINSIZEREL \
         -D CMAKE_INSTALL_PREFIX=$CACHE_DIR/.tools/opencv \
         -D BUILD_DOCS=OFF \
@@ -142,12 +145,12 @@ function install_opencv() {
         -D WITH_EIGEN=OFF \
         -D WITH_GTK=OFF \
         -D WITH_PVAPI=OFF \
-        ../OpenCV-2.4.2
+        ../OpenCV-$OPENCV_VERSION
   echo "building opencv" | indent
   make
   make install
   cd ..
-  rm -rf ./OpenCV-2.4.2
+  rm -rf ./OpenCV-$OPENCV_VERSION
   rm -rf ./release
   echo "opencv installed" | indent
   cd $currentdir
@@ -225,9 +228,10 @@ PATH="$VENDORED_SCONS:$VENDORED_NODE/bin:$PATH"
 INCLUDE_PATH="$VENDORED_NODE/include"
 export CPATH="$INCLUDE_PATH"
 export CPPPATH="$INCLUDE_PATH"
-export CPLUS_INCLUDE_PATH="/app/vendor/opencv/include/opencv/:/app/vendor/opencv/include/opencv2/"
-export LIBRARY_PATH="/app/vendor/opencv/lib/"
-export PKG_CONFIG_PATH="/app/vendor/opencv/lib/pkgconfig/"
+# cmake/opencv
+export CPLUS_INCLUDE_PATH="$OPENCV_BUILD/include/opencv/:$OPENCV_BUILD/include/opencv2/"
+export LIBRARY_PATH="$OPENCV_BUILD/lib/"
+export PKG_CONFIG_PATH="$OPENCV_BUILD/lib/pkgconfig/"
 
 # install dependencies with npm
 echo "-----> Installing dependencies with npm"
