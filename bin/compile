@@ -163,7 +163,7 @@ function install_opencv() {
 function install_opencv(){
   echo "-----> Fetching and installing opencv"
   currentdir=$(pwd)
-  package="https://github.com/downloads/bitbay/heroku-buildpack-nodejs/OpenCV-2.4.2.1-x64-custom.tar.gz"
+  package="https://github.com/downloads/bitbay/heroku-buildpack-nodejs/OpenCV-2.4.2.2-x64-custom.tar.gz"
   curl $package -L -s -o - | tar xzf - -C $VENDORED_OPENCV >/dev/null 2>&1
   echo "opencv fetched" | indent
   cd $currentdir
@@ -249,10 +249,11 @@ export C_INCLUDE_PATH="$VENDORED_OPENCV/include/opencv/:$VENDORED_OPENCV/include
 export CPLUS_INCLUDE_PATH="$VENDORED_OPENCV/include/opencv/:$VENDORED_OPENCV/include/opencv2/"
 export LIBRARY_PATH="$VENDORED_OPENCV/lib/"
 export PKG_CONFIG_PATH="$VENDORED_OPENCV/lib/pkgconfig/"
+
 echo "-----> VENDORED_OPENCV contains..."
 current_dir=$(pwd)
-cd $VENDORED_OPENCV
-echo "inside $VENDORED_OPENCV"
+cd $PKG_CONFIG_PATH
+echo "inside $PKG_CONFIG_PATH"
 for i in `ls`; do echo $i; done;
 cd $current_dir
 echo "..." | indent
