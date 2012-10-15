@@ -162,7 +162,7 @@ function install_opencv(){
   mkdir -p $CACHE_DIR/opencv_deb
   curl -L -s -o $CACHE_DIR/opencv_deb/opencv.deb https://github.com/downloads/bitbay/heroku-buildpack-nodejs/OpenCV-2.4.2.1-x64-custom.deb
   echo "opencv.deb fetched" | indent
-  sudo dpkg --install $CACHE_DIR/opencv_deb/opencv.deb
+  dpkg --install $CACHE_DIR/opencv_deb/opencv.deb
   echo "opencv installed" | indent
 }
 #VENDORED_OPENCV="$(mktmpdir opencv)"
