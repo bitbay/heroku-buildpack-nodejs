@@ -17,7 +17,24 @@ S3_BUCKET="heroku-buildpack-nodejs"
 # parse and derive params
 BUILD_DIR=$1
 CACHE_DIR=$2
+# buildpack dir
 LP_DIR=`cd $(dirname $0); cd ..; pwd`
+
+CMAKE_BUILD="$(mktmpdir cmake)"
+
+mkdir -p $CACHE_DIR/.tools/cmake
+
+export PATH=/sbin:/usr/sbin:$PATH:$CACHE_DIR/.tools/cmake/bin
+
+echo "-----> Fetching and installing cmake"
+cd $CMAKE_BUILD
+curl -O curl -O http://www.cmake.org/files/v2.8/cmake-2.8.9.tar.gz >/dev/null 2>&1
+tar jxvf cmake-2.8.9.tar.gz >/dev/null 2>&1
+cd cmake-2.8.9
+./configure --prefix=$CACHE_DIR/.tools/cmake --no-system-libs >/dev/null 2>&1
+make >/dev/null 2>&1
+make install >/dev/null 2>&1
+echo "cmake installed" | indent
 
 function deploy_opencv() {
   cd /app
@@ -193,6 +210,3 @@ echo "Dependencies installed" | indent
 echo "-----> Building runtime environment"
 mkdir -p $BUILD_DIR/.profile.d
 echo "export PATH=\"\$HOME/bin:\$HOME/node_modules/.bin:\$PATH\"" > $BUILD_DIR/.profile.d/nodejs.sh
-
-# deploying opencv
-deploy_opencv
