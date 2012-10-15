@@ -167,20 +167,7 @@ function install_opencv(){
   curl $package -L -s -o - | tar xzf - -C $VENDORED_OPENCV >/dev/null 2>&1
   echo "opencv fetched" | indent
   pcfile="$VENDORED_OPENCV/lib/pkgconfig/opencv.pc"
-  echo "before:" | indent
-  cat $pcfile
-  #  Replace "/usr/local" with "$VENDORED_OPENCV"
-  #  in opencv.pc
-  ORIGINAL=/usr/local
-
-  for word in $(fgrep -l $ORIGINAL $pcfile)
-  do
-    ex $word <<EOF
-    :%s/$ORIGINAL/$VENDORED_OPENCV/g
-    :wq
-EOF
-  done
-  
+  cat $pcfile | awk '{sub(/\/usr\/local/,"great")}; 1' >> $pcfile 
   echo "after:" | indent
   cat $pcfile
   cd $currentdir
