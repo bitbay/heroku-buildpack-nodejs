@@ -115,7 +115,8 @@ curl -O http://www.cmake.org/files/v2.8/cmake-2.8.9.tar.gz >/dev/null 2>&1
 echo "-----> cmake source downloaded $?"
 tar jxvf cmake-2.8.9.tar.gz >/dev/null 2>&1
 echo "-----> cmake extracted $?"
-cd cmake-2.8.9
+for i in `ls`; do echo $i; done;
+cd cmake*
 echo "-----> in cmake source dir now $?"
 ./configure --prefix=$CACHE_DIR/.tools/cmake --no-system-libs >/dev/null 2>&1
 echo "-----> cmake configured $?"
