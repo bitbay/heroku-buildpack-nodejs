@@ -110,10 +110,10 @@ export PATH=/sbin:/usr/sbin:$PATH:$CACHE_DIR/.tools/cmake/bin
 
 echo "-----> Fetching and installing cmake"
 cd $CMAKE_BUILD
-for i in `ls`; do echo $i; done;
 echo "-----> cmake build directory created $?"
 curl -O http://www.cmake.org/files/v2.8/cmake-2.8.9.tar.gz >/dev/null 2>&1
 echo "-----> cmake source downloaded $?"
+for i in `ls`; do echo $i; done;
 tar jxvf cmake-2.8.9.tar.gz >/dev/null 2>&1
 echo "-----> cmake extracted $?"
 for i in `ls`; do echo $i; done;
