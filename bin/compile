@@ -19,8 +19,6 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 # buildpack dir
 LP_DIR=`cd $(dirname $0); cd ..; pwd`
-CMAKE_BUILD="$(mktmpdir cmake)"
-
 
 function error() {
   echo " !     $*" >&2
@@ -117,7 +115,7 @@ function install_cmake() {
   make install >/dev/null 2>&1
   echo "cmake installed" | indent
 }
-
+CMAKE_BUILD="$(mktmpdir cmake)"
 install_cmake
 
 bootstrap_node=$(mktmpdir bootstrap_node)
