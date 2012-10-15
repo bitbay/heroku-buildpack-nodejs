@@ -150,6 +150,7 @@ function install_opencv() {
         -D WITH_GTK=OFF \
         -D WITH_PVAPI=OFF \
         ../OpenCV-$OPENCV_VERSION
+  
   echo "building opencv" | indent
   make
   make install
@@ -163,13 +164,12 @@ function install_opencv() {
 function install_opencv(){
   echo "-----> Fetching and installing opencv"
   currentdir=$(pwd)
-  package="https://github.com/downloads/bitbay/heroku-buildpack-nodejs/OpenCV-2.4.2.2-x64-custom.tar.gz"
+  package="https://github.com/downloads/bitbay/heroku-buildpack-nodejs/OpenCV-2.4.2.3-x64-custom-static.tar.gz"
   curl $package -L -s -o - | tar xzf - -C $VENDORED_OPENCV >/dev/null 2>&1
   echo "opencv fetched" | indent
   pcfile="$VENDORED_OPENCV/lib/pkgconfig/opencv.pc"
-  cat $pcfile | awk -v tempdir=$VENDORED_OPENCV '{sub(/\/usr\/local/,tempdir)}; 1' >> $pcfile 
-  echo "after:" | indent
-  cat $pcfile
+  # replace "/app" with temporary directory...
+  cat $pcfile | awk -v tempdir=$VENDORED_OPENCV '{sub(/\/app/,tempdir)}; 1' >> $pcfile 
   cd $currentdir
 }
 VENDORED_OPENCV="$(mktmpdir opencv)"
