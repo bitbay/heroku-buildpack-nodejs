@@ -131,7 +131,7 @@ function install_opencv() {
   mkdir release && cd release
   cmake -D CMAKE_BUILD_TYPE=MINSIZEREL \
         -D CMAKE_INSTALL_PREFIX=$CACHE_DIR/.tools/opencv \
-        -D BUILD_DOCS_OFF \
+        -D BUILD_DOCS=OFF \
         -D BUILD_PREF_TESTS=OFF \
         -D BUILD_TESTS=OFF \
         -D BUILD_opencv_calib3d=OFF \
