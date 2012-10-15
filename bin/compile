@@ -101,19 +101,23 @@ function package_download() {
 }
 
 function install_cmake() {
+  currentdir=$(pwd)
   mkdir -p $CACHE_DIR/.tools/cmake
   export PATH=/sbin:/usr/sbin:$PATH:$CACHE_DIR/.tools/cmake/bin
   echo "-----> Fetching and installing cmake"
   cd $CMAKE_BUILD
   package="http://www.cmake.org/files/v2.8/cmake-2.8.9.tar.gz"
   curl $package -s -o - | tar xzf - >/dev/null 2>&1
-  echo "-----> cmake source downloaded $?"
+  echo "cmake source downloaded $?" | indent
   cd cmake*
-  echo "-----> configuring cmake"
+  echo "configuring cmake" | indent
   ./configure --prefix=$CACHE_DIR/.tools/cmake --no-system-libs >/dev/null 2>&1
   make >/dev/null 2>&1
   make install >/dev/null 2>&1
   echo "cmake installed" | indent
+  cd ..
+  rm -rf ./cmake*
+  cd $currentdir
 }
 CMAKE_BUILD="$(mktmpdir cmake)"
 install_cmake
@@ -126,8 +130,8 @@ declare -A engine_versions
 declare -A engine_defaults
 declare -A engine_requests
 
-engine_defaults["node"]="0.4.7"
-engine_defaults["npm"]="1.0.106"
+engine_defaults["node"]="0.8.11"
+engine_defaults["npm"]="1.1.49"
 
 engine_versions["node"]=$(manifest_versions "nodejs")
 engine_requests["node"]=$(package_engine_version "node")
