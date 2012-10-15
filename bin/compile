@@ -167,7 +167,7 @@ function install_opencv(){
   curl $package -L -s -o - | tar xzf - -C $VENDORED_OPENCV >/dev/null 2>&1
   echo "opencv fetched" | indent
   pcfile="$VENDORED_OPENCV/lib/pkgconfig/opencv.pc"
-  cat $pcfile | awk '{sub(/\/usr\/local/,"great")}; 1' >> $pcfile 
+  cat $pcfile | awk -v tempdir=$VENDORED_OPENCV '{sub(/\/usr\/local/,tempdir)}; 1' >> $pcfile 
   echo "after:" | indent
   cat $pcfile
   cd $currentdir
