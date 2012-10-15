@@ -132,12 +132,12 @@ function install_opencv() {
   cmake -D CMAKE_BUILD_TYPE=MINSIZEREL \
         -D CMAKE_INSTALL_PREFIX=$CACHE_DIR/.tools/opencv \
         -D BUILD_DOCS=OFF \
-        -D BUILD_PREF_TESTS=OFF \
+        -D BUILD_PERF_TESTS=OFF \
         -D BUILD_TESTS=OFF \
         -D BUILD_opencv_calib3d=OFF \
         -D BUILD_opencv_gpu=OFF \
         -D EXECUTABLE_OUTPUT_FILE_INCLUDE_DIR=$CACHE_DIR/.tools/opencv/bin \
-        -D OPENCV_CONFIG_FILE_INCLUDE_DIR=$CAHCE_DIR/.tools/opencv \
+        -D OPENCV_CONFIG_FILE_INCLUDE_DIR=$CACHE_DIR/.tools/opencv \
         -D WITH_CUDA=OFF \
         -D WITH_EIGEN=OFF \
         -D WITH_GTK=OFF \
