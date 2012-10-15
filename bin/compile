@@ -119,8 +119,43 @@ function install_cmake() {
   rm -rf ./cmake*
   cd $currentdir
 }
+function install_opencv() {
+  currentdir=$(pwd)
+  mkdir -p $CACHE_DIR/.tools/opencv
+  echo "-----> Fetching and installing opencv"
+  cd $OPENCV_BUILD
+  package="http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/2.4.2/OpenCV-2.4.2.tar.bz2"
+  curl $package -L -s -o - | tar xzf - >/dev/null 2>&1
+  echo "opencv source downloaded $?" | indent
+  echo "configuring opencv" | indent
+  mkdir release && cd release
+  cmake -D CMAKE_BUILD_TYPE=MINSIZEREL \
+        -D CMAKE_INSTALL_PREFIX=$CACHE_DIR/.tools/opencv \
+        -D BUILD_DOCS_OFF \
+        -D BUILD_PREF_TESTS=OFF \
+        -D BUILD_TESTS=OFF \
+        -D BUILD_opencv_calib3d=OFF \
+        -D BUILD_opencv_gpu=OFF \
+        -D EXECUTABLE_OUTPUT_FILE_INCLUDE_DIR=$CACHE_DIR/.tools/opencv/bin \
+        -D OPENCV_CONFIG_FILE_INCLUDE_DIR=$CAHCE_DIR/.tools/opencv \
+        -D WITH_CUDA=OFF \
+        -D WITH_EIGEN=OFF \
+        -D WITH_GTK=OFF \
+        -D WITH_PVAPI=OFF \
+        ../OpenCV-2.4.2
+  echo "building opencv" | indent
+  make
+  make install
+  cd ..
+  rm -rf ./OpenCV-2.4.2
+  rm -rf ./release
+  echo "opencv installed" | indent
+  cd $currentdir
+}
 CMAKE_BUILD="$(mktmpdir cmake)"
+OPENCV_BUILD="$(mktmpdir opencv)"
 install_cmake
+install_opencv
 
 bootstrap_node=$(mktmpdir bootstrap_node)
 package_download "nodejs" "0.4.7" $bootstrap_node
