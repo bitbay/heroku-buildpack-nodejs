@@ -169,7 +169,8 @@ function install_opencv(){
   echo "opencv fetched" | indent
   pcfile="$VENDORED_OPENCV/lib/pkgconfig/opencv.pc"
   # replace "/app" with temporary directory...
-  cat $pcfile | awk -v tempdir=$VENDORED_OPENCV '{sub(/\/app/,tempdir)}; 1' >> $pcfile 
+  cat $pcfile | awk -v tempdir=$VENDORED_OPENCV '{sub(/\/app/,tempdir)}; 1' >> $pcfile
+  cat $pcfile
   cd $currentdir
 }
 VENDORED_OPENCV="$(mktmpdir opencv)"
@@ -264,7 +265,8 @@ echo "..." | indent
 
 # install dependencies with npm
 echo "-----> Installing dependencies with npm"
-run_npm "install --production"
+#run_npm "install --production"
+run_npm "install"
 run_npm "rebuild"
 echo "Dependencies installed" | indent
 
