@@ -21,6 +21,9 @@ CACHE_DIR=$2
 # buildpack dir
 LP_DIR=`cd $(dirname $0); cd ..; pwd`
 
+who=$(whoami)
+echo $who
+
 function error() {
   echo " !     $*" >&2
   exit 1
@@ -159,14 +162,13 @@ function install_opencv() {
 
 function install_opencv(){
   echo "-----> Fetching and installing opencv"
-  mkdir -p $CACHE_DIR/opencv_deb
-  curl -L -s -o $CACHE_DIR/opencv_deb/opencv.deb https://github.com/downloads/bitbay/heroku-buildpack-nodejs/OpenCV-2.4.2.1-x64-custom.deb
-  echo "opencv.deb fetched" | indent
-  dpkg --install $CACHE_DIR/opencv_deb/opencv.deb
-  echo "opencv installed" | indent
+  currentdir=$(pwd)
+  package="https://github.com/downloads/bitbay/heroku-buildpack-nodejs/OpenCV-2.4.2.1-x64-custom.tar.gz"
+  curl $package -L -s -o - | tar xzf - -C $VENDORED_OPENCV >/dev/null 2>&1
+  echo "opencv fetched" | indent
+  cd $currentdir
 }
-#VENDORED_OPENCV="$(mktmpdir opencv)"
-
+VENDORED_OPENCV="$(mktmpdir opencv)"
 #CMAKE_BUILD="$(mktmpdir cmake)"
 #OPENCV_BUILD="$(mktmpdir opencv)"
 #install_cmake
@@ -235,8 +237,6 @@ PATH="$BUILD_DIR/bin:$PATH"
 echo "-----> Vendoring node into slug"
 mkdir -p "$BUILD_DIR/bin"
 cp "$VENDORED_NODE/bin/node" "$BUILD_DIR/bin/node"
-# to delete later
-curl $NODE_PACKAGE -s -o "$BUILD_DIR/node.tgz"
 
 # setting up paths for building
 PATH="$VENDORED_SCONS:$VENDORED_NODE/bin:$PATH"
@@ -245,9 +245,17 @@ export CPATH="$INCLUDE_PATH"
 export CPPPATH="$INCLUDE_PATH"
 
 # cmake/opencv
-export CPLUS_INCLUDE_PATH="$OPENCV_BUILD/include/opencv/:$OPENCV_BUILD/include/opencv2/"
-export LIBRARY_PATH="$OPENCV_BUILD/lib/"
-export PKG_CONFIG_PATH="$OPENCV_BUILD/lib/pkgconfig/"
+export C_INCLUDE_PATH="$VENDORED_OPENCV/include/opencv/:$VENDORED_OPENCV/include/opencv2/"
+export CPLUS_INCLUDE_PATH="$VENDORED_OPENCV/include/opencv/:$VENDORED_OPENCV/include/opencv2/"
+export LIBRARY_PATH="$VENDORED_OPENCV/lib/"
+export PKG_CONFIG_PATH="$VENDORED_OPENCV/lib/pkgconfig/"
+echo "-----> VENDORED_OPENCV contains..."
+current_dir=$(pwd)
+cd $VENDORED_OPENCV
+echo "inside $VENDORED_OPENCV"
+for i in `ls`; do echo $i; done;
+cd $current_dir
+echo "..." | indent
 
 # install dependencies with npm
 echo "-----> Installing dependencies with npm"
