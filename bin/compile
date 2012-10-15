@@ -110,7 +110,7 @@ export PATH=/sbin:/usr/sbin:$PATH:$CACHE_DIR/.tools/cmake/bin
 
 echo "-----> Fetching and installing cmake"
 cd $CMAKE_BUILD
-curl -O curl -O http://www.cmake.org/files/v2.8/cmake-2.8.9.tar.gz >/dev/null 2>&1
+curl -O http://www.cmake.org/files/v2.8/cmake-2.8.9.tar.gz >/dev/null 2>&1
 tar jxvf cmake-2.8.9.tar.gz >/dev/null 2>&1
 cd cmake-2.8.9
 ./configure --prefix=$CACHE_DIR/.tools/cmake --no-system-libs >/dev/null 2>&1
