@@ -19,6 +19,7 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 # buildpack dir
 LP_DIR=`cd $(dirname $0); cd ..; pwd`
+CMAKE_BUILD="$(mktmpdir cmake)"
 
 
 function error() {
@@ -101,29 +102,23 @@ function package_download() {
   curl $package -s -o - | tar xzf - -C $location
 }
 
+function install_cmake() {
+  mkdir -p $CACHE_DIR/.tools/cmake
+  export PATH=/sbin:/usr/sbin:$PATH:$CACHE_DIR/.tools/cmake/bin
+  echo "-----> Fetching and installing cmake"
+  cd $CMAKE_BUILD
+  package="http://www.cmake.org/files/v2.8/cmake-2.8.9.tar.gz"
+  curl $package -s -o - | tar xzf - >/dev/null 2>&1
+  echo "-----> cmake source downloaded $?"
+  cd cmake*
+  echo "-----> configuring cmake"
+  ./configure --prefix=$CACHE_DIR/.tools/cmake --no-system-libs >/dev/null 2>&1
+  make >/dev/null 2>&1
+  make install >/dev/null 2>&1
+  echo "cmake installed" | indent
+}
 
-CMAKE_BUILD="$(mktmpdir cmake)"
-
-mkdir -p $CACHE_DIR/.tools/cmake
-
-export PATH=/sbin:/usr/sbin:$PATH:$CACHE_DIR/.tools/cmake/bin
-
-echo "-----> Fetching and installing cmake"
-cd $CMAKE_BUILD
-echo "-----> cmake build directory created $?"
-curl -O http://www.cmake.org/files/v2.8/cmake-2.8.9.tar.gz >/dev/null 2>&1
-echo "-----> cmake source downloaded $?"
-for i in `ls`; do echo $i; done;
-tar -xvf cmake-2.8.9.tar.gz >/dev/null 2>&1
-echo "-----> cmake extracted $?"
-for i in `ls`; do echo $i; done;
-cd cmake*
-echo "-----> in cmake source dir now $?"
-./configure --prefix=$CACHE_DIR/.tools/cmake --no-system-libs >/dev/null 2>&1
-echo "-----> cmake configured $?"
-make >/dev/null 2>&1
-make install >/dev/null 2>&1
-echo "cmake installed" | indent
+install_cmake
 
 bootstrap_node=$(mktmpdir bootstrap_node)
 package_download "nodejs" "0.4.7" $bootstrap_node
