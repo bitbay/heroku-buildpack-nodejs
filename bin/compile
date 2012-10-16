@@ -171,7 +171,7 @@ function install_opencv(){
   # replace "/app" with temporary directory...
   
   #cat $pcfile | awk -v tempdir="/app/lib64/" '{sub(/\/app/,tempdir)}; 1' > $pcfile
-  sed -ie 's/\/app/${VENDORED_OPENCV}/g' /tmp/file.txt
+  sed -ie 's/\/app/${VENDORED_OPENCV}/g' $pcfile
   cat $pcfile
   #mkdir -p "$BUILD_DIR/lib64/opencv"
   #cp $VENDORED_OPENCV/* "$BUILD_DIR/lib64/opencv"
