@@ -169,7 +169,9 @@ function install_opencv(){
   echo "opencv fetched" | indent
   pcfile="$VENDORED_OPENCV/lib/pkgconfig/opencv.pc"
   # replace "/app" with temporary directory...
-  cat $pcfile | awk -v tempdir="/app/lib64/" '{sub(/\/app/,tempdir)}; 1' > $pcfile
+  
+  #cat $pcfile | awk -v tempdir="/app/lib64/" '{sub(/\/app/,tempdir)}; 1' > $pcfile
+  sed -ie 's/\/app/${VENDORED_OPENCV}/g' /tmp/file.txt
   cat $pcfile
   #mkdir -p "$BUILD_DIR/lib64/opencv"
   #cp $VENDORED_OPENCV/* "$BUILD_DIR/lib64/opencv"
