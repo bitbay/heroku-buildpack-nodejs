@@ -174,7 +174,6 @@ function install_opencv(){
   #cp $VENDORED_OPENCV/* "$BUILD_DIR/lib64/opencv"
   #pcfile="$BUILD_DIR/lib/pkgconfig/opencv.pc"
   #cat $pcfile | awk -v tempdir=$VENDORED_OPENCV '{sub(/\/app/,tempdir)}; 1' > $pcfile
-  pkg=$(pkg-config --cflags --libs opencv)
   cd $currentdir
 }
 
@@ -270,7 +269,8 @@ export C_INCLUDE_PATH="$VENDORED_OPENCV/include/opencv/:$VENDORED_OPENCV/include
 export CPLUS_INCLUDE_PATH="$VENDORED_OPENCV/include/opencv/:$VENDORED_OPENCV/include/opencv2/"
 export LIBRARY_PATH="$VENDORED_OPENCV/lib/"
 export PKG_CONFIG_PATH="$VENDORED_OPENCV/lib/pkgconfig/"
-#echo "..." | indent
+pkg=$(pkg-config --cflags --libs opencv)
+echo "..." | indent
 
 # install dependencies with npm
 echo "-----> Installing dependencies with npm"
