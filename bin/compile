@@ -21,9 +21,6 @@ CACHE_DIR=$2
 # buildpack dir
 LP_DIR=`cd $(dirname $0); cd ..; pwd`
 
-who=$(whoami)
-echo $who
-
 function error() {
   echo " !     $*" >&2
   exit 1
@@ -180,25 +177,32 @@ function install_opencv(){
   #cat $pcfile | awk -v tempdir=$VENDORED_OPENCV '{sub(/\/app/,tempdir)}; 1' > $pcfile
   cd $currentdir
 }
-
+################################################################################
 function deploy_opencv(){
   echo "-----> Fetching and deploying opencv"
   mkdir -p "$BUILD_DIR/opencv"
-  package="https://github.com/downloads/bitbay/heroku-buildpack-nodejs/OpenCV-2.4.2.4-x64-shared-cmake-norpath.tar.gz"
+  #package="https://github.com/downloads/bitbay/heroku-buildpack-nodejs/OpenCV-2.4.2.4-x64-shared-cmake-norpath.tar.gz"
+  package="https://github.com/downloads/bitbay/heroku-buildpack-nodejs/OpenCV-2.4.2.3-x64-custom-static.tar.gz"
   curl $package -L -s -o - | tar xzf - -C $BUILD_DIR/opencv >/dev/null 2>&1
   echo "opencv fetched" | indent
   pcfile="$BUILD_DIR/opencv/lib/pkgconfig/opencv.pc"
-  # replace "/app" with temporary directory...
+  
+  # monkey patching pkg-configure file...
   sed -ie "s~/app~$VENDORED_OPENCV~g" $pcfile
+  sed -ie "s~ rt ~ /lib/librt.so.1 ~g" $pcfile
+  sed -ie "s~ pthread ~ /lib/libpthread.so.0 ~g" $pcfile
+  sed -ie "s~ m ~ /lib/libm.so.6 ~g" $pcfile
+  sed -ie "s~ dl ~ /lib/libdl.so.2 ~g" $pcfile
+  sed -ie "s~ stdc++ ~ /usr/lib/libstdc++.so.6 ~g" $pcfile
 }
 
 VENDORED_OPENCV="$(mktmpdir opencv)"
 #CMAKE_BUILD="$(mktmpdir cmake)"
 #OPENCV_BUILD="$(mktmpdir opencv)"
 #install_cmake
-install_opencv
-#deploy_opencv
-
+#install_opencv
+deploy_opencv
+################################################################################
 
 bootstrap_node=$(mktmpdir bootstrap_node)
 package_download "nodejs" "0.4.7" $bootstrap_node
@@ -268,14 +272,16 @@ INCLUDE_PATH="$VENDORED_NODE/include"
 export CPATH="$INCLUDE_PATH"
 export CPPPATH="$INCLUDE_PATH"
 
+################################################################################
 # cmake/opencv
-export C_INCLUDE_PATH="$VENDORED_OPENCV/include/opencv/:$VENDORED_OPENCV/include/opencv2/"
-export CPLUS_INCLUDE_PATH="$VENDORED_OPENCV/include/opencv/:$VENDORED_OPENCV/include/opencv2/"
-export LIBRARY_PATH="$VENDORED_OPENCV/lib/"
-export PKG_CONFIG_PATH="$VENDORED_OPENCV/lib/pkgconfig/"
+export C_INCLUDE_PATH="$BUILD_DIR/opencv/include/opencv/:$BUILD_DIR/opencv/include/opencv2/"
+export CPLUS_INCLUDE_PATH="$BUILD_DIR/opencv/include/opencv/:$BUILD_DIR/opencv/include/opencv2/"
+export LD_LIBRARY_PATH="$BUILD_DIR/opencv/lib/"
+export PKG_CONFIG_PATH="$BUILD_DIR/opencv/lib/pkgconfig/"
 pkg=$(pkg-config --cflags --libs opencv)
 echo $pkg
 echo "..." | indent
+################################################################################
 
 # install dependencies with npm
 echo "-----> Installing dependencies with npm"
