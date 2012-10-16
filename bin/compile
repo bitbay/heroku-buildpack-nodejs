@@ -164,7 +164,7 @@ function install_opencv() {
 function install_opencv(){
   echo "-----> Fetching and installing opencv"
   currentdir=$(pwd)
-  package="https://github.com/downloads/bitbay/heroku-buildpack-nodejs/OpenCV-2.4.2.3-x64-custom-static.tar.gz"
+  package="https://github.com/downloads/bitbay/heroku-buildpack-nodejs/OpenCV-2.4.2.4-x64-shared-cmake-norpath.tar.gz"
   curl $package -L -s -o - | tar xzf - -C $VENDORED_OPENCV >/dev/null 2>&1
   echo "opencv fetched" | indent
   pcfile="$VENDORED_OPENCV/lib/pkgconfig/opencv.pc"
@@ -183,13 +183,13 @@ function install_opencv(){
 
 function deploy_opencv(){
   echo "-----> Fetching and deploying opencv"
-  mkdir -p "$BUILD_DIR/lib64/opencv"
-  package="https://github.com/downloads/bitbay/heroku-buildpack-nodejs/OpenCV-2.4.2.3-x64-custom-static.tar.gz"
-  curl $package -L -s -o - | tar xzf - -C $BUILD_DIR/lib64/opencv >/dev/null 2>&1
+  mkdir -p "$BUILD_DIR/opencv"
+  package="https://github.com/downloads/bitbay/heroku-buildpack-nodejs/OpenCV-2.4.2.4-x64-shared-cmake-norpath.tar.gz"
+  curl $package -L -s -o - | tar xzf - -C $BUILD_DIR/opencv >/dev/null 2>&1
   echo "opencv fetched" | indent
-  pcfile="$BUILD_DIR/lib64/opencv/lib/pkgconfig/opencv.pc"
+  pcfile="$BUILD_DIR/opencv/lib/pkgconfig/opencv.pc"
   # replace "/app" with temporary directory...
-  cat $pcfile | awk -v tempdir="/app/lib64/opencv" '{sub(/\/app/,tempdir)}; 1' > $pcfile
+  sed -ie "s~/app~$VENDORED_OPENCV~g" $pcfile
 }
 
 VENDORED_OPENCV="$(mktmpdir opencv)"
