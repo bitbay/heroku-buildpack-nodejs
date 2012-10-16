@@ -264,23 +264,15 @@ export CPATH="$INCLUDE_PATH"
 export CPPPATH="$INCLUDE_PATH"
 
 # cmake/opencv
-export C_INCLUDE_PATH="$VENDORED_OPENCV/include/opencv/:$VENDORED_OPENCV/include/opencv2/"
-export CPLUS_INCLUDE_PATH="$VENDORED_OPENCV/include/opencv/:$VENDORED_OPENCV/include/opencv2/"
-export LIBRARY_PATH="$VENDORED_OPENCV/lib/"
-export PKG_CONFIG_PATH="$VENDORED_OPENCV/lib/pkgconfig/"
-
-echo "-----> VENDORED_OPENCV contains..."
-current_dir=$(pwd)
-cd $PKG_CONFIG_PATH
-echo "inside $PKG_CONFIG_PATH"
-for i in `ls`; do echo $i; done;
-cd $current_dir
-echo "..." | indent
+#export C_INCLUDE_PATH="$VENDORED_OPENCV/include/opencv/:$VENDORED_OPENCV/include/opencv2/"
+#export CPLUS_INCLUDE_PATH="$VENDORED_OPENCV/include/opencv/:$VENDORED_OPENCV/include/opencv2/"
+#export LIBRARY_PATH="$VENDORED_OPENCV/lib/"
+#export PKG_CONFIG_PATH="$VENDORED_OPENCV/lib/pkgconfig/"
+#echo "..." | indent
 
 # install dependencies with npm
 echo "-----> Installing dependencies with npm"
-#run_npm "install --production"
-run_npm "install"
+run_npm "install --production"
 run_npm "rebuild"
 echo "Dependencies installed" | indent
 
