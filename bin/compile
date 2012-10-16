@@ -188,7 +188,7 @@ function deploy_opencv(){
   pcfile="$BUILD_DIR/opencv/lib/pkgconfig/opencv.pc"
   
   # monkey patching pkg-configure file...
-  sed -ie "s~/app~$VENDORED_OPENCV~g" $pcfile
+  sed -ie "s~/app~$BUILD_DIR/opencv~g" $pcfile
   sed -ie "s~ rt ~ /lib/librt.so.1 ~g" $pcfile
   sed -ie "s~ pthread ~ /lib/libpthread.so.0 ~g" $pcfile
   sed -ie "s~ m ~ /lib/libm.so.6 ~g" $pcfile
