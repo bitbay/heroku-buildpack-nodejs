@@ -274,6 +274,7 @@ export CPLUS_INCLUDE_PATH="$VENDORED_OPENCV/include/opencv/:$VENDORED_OPENCV/inc
 export LIBRARY_PATH="$VENDORED_OPENCV/lib/"
 export PKG_CONFIG_PATH="$VENDORED_OPENCV/lib/pkgconfig/"
 pkg=$(pkg-config --cflags --libs opencv)
+echo $pkg
 echo "..." | indent
 
 # install dependencies with npm
