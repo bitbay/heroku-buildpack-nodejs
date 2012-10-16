@@ -169,10 +169,11 @@ function install_opencv(){
   echo "opencv fetched" | indent
   pcfile="$VENDORED_OPENCV/lib/pkgconfig/opencv.pc"
   # replace "/app" with temporary directory...
-  cat $pcfile | awk -v tempdir="/app/lib64/" '{sub(/\/app/,tempdir)}; 1' >> $pcfile
+  cat $pcfile | awk -v tempdir="/app/lib64/" '{sub(/\/app/,tempdir)}; 1' > $pcfile
   mkdir -p "$BUILD_DIR/lib64/opencv"
   cp "$VENDORED_OPENCV/*" "$BUILD_DIR/lib64/opencv"
-  cat $pcfile | awk -v tempdir=$VENDORED_OPENCV '{sub(/\/app/,tempdir)}; 1' >> $pcfile
+  pcfile="$BUILD_DIR/lib/pkgconfig/opencv.pc"
+  cat $pcfile | awk -v tempdir=$VENDORED_OPENCV '{sub(/\/app/,tempdir)}; 1' > $pcfile
   cd $currentdir
 }
 
@@ -184,15 +185,15 @@ function deploy_opencv(){
   echo "opencv fetched" | indent
   pcfile="$BUILD_DIR/lib64/opencv/lib/pkgconfig/opencv.pc"
   # replace "/app" with temporary directory...
-  cat $pcfile | awk -v tempdir="/app/lib64/opencv" '{sub(/\/app/,tempdir)}; 1' >> $pcfile
+  cat $pcfile | awk -v tempdir="/app/lib64/opencv" '{sub(/\/app/,tempdir)}; 1' > $pcfile
 }
 
 VENDORED_OPENCV="$(mktmpdir opencv)"
 #CMAKE_BUILD="$(mktmpdir cmake)"
 #OPENCV_BUILD="$(mktmpdir opencv)"
 #install_cmake
-#install_opencv
-deploy_opencv
+install_opencv
+#deploy_opencv
 
 
 bootstrap_node=$(mktmpdir bootstrap_node)
@@ -269,10 +270,10 @@ export CPATH="$INCLUDE_PATH"
 export CPPPATH="$INCLUDE_PATH"
 
 # cmake/opencv
-#export C_INCLUDE_PATH="$VENDORED_OPENCV/include/opencv/:$VENDORED_OPENCV/include/opencv2/"
-#export CPLUS_INCLUDE_PATH="$VENDORED_OPENCV/include/opencv/:$VENDORED_OPENCV/include/opencv2/"
-#export LIBRARY_PATH="$VENDORED_OPENCV/lib/"
-#export PKG_CONFIG_PATH="$VENDORED_OPENCV/lib/pkgconfig/"
+export C_INCLUDE_PATH="$VENDORED_OPENCV/include/opencv/:$VENDORED_OPENCV/include/opencv2/"
+export CPLUS_INCLUDE_PATH="$VENDORED_OPENCV/include/opencv/:$VENDORED_OPENCV/include/opencv2/"
+export LIBRARY_PATH="$VENDORED_OPENCV/lib/"
+export PKG_CONFIG_PATH="$VENDORED_OPENCV/lib/pkgconfig/"
 #echo "..." | indent
 
 # install dependencies with npm
