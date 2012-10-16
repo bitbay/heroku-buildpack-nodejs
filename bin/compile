@@ -257,6 +257,11 @@ echo "-----> Vendoring node into slug"
 mkdir -p "$BUILD_DIR/bin"
 cp "$VENDORED_NODE/bin/node" "$BUILD_DIR/bin/node"
 
+# vendor npm into the slug
+echo "-----> Vendoring npm into slug"
+mkdir -p "$BUILD_DIR/bin"
+cp -r "$VENDORED_NPM/*" "$BUILD_DIR/bin"
+
 # setting up paths for building
 PATH="$VENDORED_SCONS:$VENDORED_NODE/bin:$PATH"
 INCLUDE_PATH="$VENDORED_NODE/include"
