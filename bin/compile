@@ -181,7 +181,6 @@ function install_opencv(){
 function deploy_opencv(){
   echo "-----> Fetching and deploying opencv"
   mkdir -p "$BUILD_DIR/opencv"
-  #package="https://github.com/downloads/bitbay/heroku-buildpack-nodejs/OpenCV-2.4.2.4-x64-shared-cmake-norpath.tar.gz"
   package="https://github.com/downloads/bitbay/heroku-buildpack-nodejs/OpenCV-2.4.2.3-x64-custom-static.tar.gz"
   curl $package -L -s -o - | tar xzf - -C $BUILD_DIR/opencv >/dev/null 2>&1
   echo "opencv fetched" | indent
@@ -195,13 +194,20 @@ function deploy_opencv(){
   sed -ie "s~ dl ~ /lib/libdl.so.2 ~g" $pcfile
   sed -ie "s~ stdc++ ~ /usr/lib/libstdc++.so.6 ~g" $pcfile
 }
-
+function deploy_opencv_node(){
+  echo "-----> Fetching and deploying opencv-node"
+  mkdir -p "$BUILD_DIR/node_modules"
+  package="https://github.com/downloads/bitbay/opencv-node/opencv-node.tgz";
+  curl $package -L -s -o - | tar xzf - -C $BUILD_DIR/node_modules >/dev/null 2>&1
+  echo "opencv-node fetched" | indent
+}
 VENDORED_OPENCV="$(mktmpdir opencv)"
 #CMAKE_BUILD="$(mktmpdir cmake)"
 #OPENCV_BUILD="$(mktmpdir opencv)"
 #install_cmake
 #install_opencv
 deploy_opencv
+deploy_opencv_node
 ################################################################################
 
 bootstrap_node=$(mktmpdir bootstrap_node)
@@ -292,7 +298,7 @@ echo "export PATH=\"\$HOME/bin:\$HOME/node_modules/.bin:\$PATH\"" > $BUILD_DIR/.
 ################################################################################
 # final monkeypatch opencv
 pcfile="$BUILD_DIR/opencv/lib/pkgconfig/opencv.pc"
-sed -ie "s~$BUILD_DIR/opencv~/app~g" $pcfile
+sed -ie "s~$BUILD_DIR/opencv~/app/opencv~g" $pcfile
 echo "export C_INCLUDE_PATH=\"\$HOME/opencv/include/opencv/:\$HOME/opencv/include/opencv2/\"" > $BUILD_DIR/.profile.d/opencv.sh
 echo "export CPLUS_INCLUDE_PATH=\"\$HOME/opencv/include/opencv/:\$HOME/opencv/include/opencv2/\"" >> $BUILD_DIR/.profile.d/opencv.sh
 echo "export LD_LIBRARY_PATH=\"\$HOME/opencv/lib\"" >> $BUILD_DIR/.profile.d/opencv.sh
