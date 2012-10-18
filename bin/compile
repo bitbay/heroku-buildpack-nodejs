@@ -278,9 +278,6 @@ export C_INCLUDE_PATH="$BUILD_DIR/opencv/include/opencv/:$BUILD_DIR/opencv/inclu
 export CPLUS_INCLUDE_PATH="$BUILD_DIR/opencv/include/opencv/:$BUILD_DIR/opencv/include/opencv2/"
 export LD_LIBRARY_PATH="$BUILD_DIR/opencv/lib/"
 export PKG_CONFIG_PATH="$BUILD_DIR/opencv/lib/pkgconfig/"
-pkg=$(pkg-config --cflags --libs opencv)
-echo $pkg
-echo "..." | indent
 ################################################################################
 
 # install dependencies with npm
@@ -292,4 +289,12 @@ echo "Dependencies installed" | indent
 echo "-----> Building runtime environment"
 mkdir -p $BUILD_DIR/.profile.d
 echo "export PATH=\"\$HOME/bin:\$HOME/node_modules/.bin:\$PATH\"" > $BUILD_DIR/.profile.d/nodejs.sh
+################################################################################
+# final monkeypatch opencv
+pcfile="$BUILD_DIR/opencv/lib/pkgconfig/opencv.pc"
+sed -ie "s~$BUILD_DIR/opencv~/app~g" $pcfile
+echo "export C_INCLUDE_PATH=\"\$HOME/opencv/include/opencv/:\$HOME/opencv/include/opencv2/\"" > $BUILD_DIR/.profile.d/opencv.sh
+echo "export CPLUS_INCLUDE_PATH=\"\$HOME/opencv/include/opencv/:\$HOME/opencv/include/opencv2/\"" >> $BUILD_DIR/.profile.d/opencv.sh
+echo "export LD_LIBRARY_PATH=\"\$HOME/opencv/lib\"" >> $BUILD_DIR/.profile.d/opencv.sh
+echo "export PKG_CONFIG_PATH=\"\$HOME/opencv/lib/pkconfig/\"" >> $BUILD_DIR/.profile.d/opencv.sh
 echo "..." | indent
