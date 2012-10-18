@@ -207,7 +207,6 @@ VENDORED_OPENCV="$(mktmpdir opencv)"
 #install_cmake
 #install_opencv
 deploy_opencv
-deploy_opencv_node
 ################################################################################
 
 bootstrap_node=$(mktmpdir bootstrap_node)
@@ -304,3 +303,5 @@ echo "export CPLUS_INCLUDE_PATH=\"\$HOME/opencv/include/\"" >> $BUILD_DIR/.profi
 echo "export LD_LIBRARY_PATH=\"\$HOME/opencv/lib/\"" >> $BUILD_DIR/.profile.d/opencv.sh
 echo "export PKG_CONFIG_PATH=\"\$HOME/opencv/lib/pkconfig/\"" >> $BUILD_DIR/.profile.d/opencv.sh
 echo "..." | indent
+# deploying opencv-node
+deploy_opencv_node
