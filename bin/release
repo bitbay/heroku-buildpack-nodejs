@@ -6,6 +6,10 @@ cat <<EOF
 ---
 config_vars:
   PATH: bin:node_modules/.bin:/usr/local/bin:/usr/bin:/bin
+  C_INCLUDE_PATH: /app/opencv/include/opencv/:/app/opencv/include/opencv2/
+  CPLUS_INCLUDE_PATH: /app/opencv/include/opencv/:/app/opencv/include/opencv2/
+  LD_LIBRARY_PATH: /app/opencv/lib/
+  PKG_CONFIG_PATH: /app/opencv/lib/pkgconfig/
 default_process_types:
   web: bin/node web.js
 EOF
