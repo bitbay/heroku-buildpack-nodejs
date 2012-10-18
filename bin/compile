@@ -280,8 +280,8 @@ export CPPPATH="$INCLUDE_PATH"
 
 ################################################################################
 # cmake/opencv
-export C_INCLUDE_PATH="$BUILD_DIR/opencv/include/opencv/:$BUILD_DIR/opencv/include/opencv2/"
-export CPLUS_INCLUDE_PATH="$BUILD_DIR/opencv/include/opencv/:$BUILD_DIR/opencv/include/opencv2/"
+export C_INCLUDE_PATH="$BUILD_DIR/opencv/include/"
+export CPLUS_INCLUDE_PATH="$BUILD_DIR/opencv/include/"
 export LD_LIBRARY_PATH="$BUILD_DIR/opencv/lib/"
 export PKG_CONFIG_PATH="$BUILD_DIR/opencv/lib/pkgconfig/"
 ################################################################################
@@ -299,8 +299,8 @@ echo "export PATH=\"\$HOME/bin:\$HOME/node_modules/.bin:\$PATH\"" > $BUILD_DIR/.
 # final monkeypatch opencv
 pcfile="$BUILD_DIR/opencv/lib/pkgconfig/opencv.pc"
 sed -ie "s~$BUILD_DIR/opencv~/app/opencv~g" $pcfile
-echo "export C_INCLUDE_PATH=\"\$HOME/opencv/include/opencv/:\$HOME/opencv/include/opencv2/\"" > $BUILD_DIR/.profile.d/opencv.sh
-echo "export CPLUS_INCLUDE_PATH=\"\$HOME/opencv/include/opencv/:\$HOME/opencv/include/opencv2/\"" >> $BUILD_DIR/.profile.d/opencv.sh
-echo "export LD_LIBRARY_PATH=\"\$HOME/opencv/lib\"" >> $BUILD_DIR/.profile.d/opencv.sh
+echo "export C_INCLUDE_PATH=\"\$HOME/opencv/include/\"" > $BUILD_DIR/.profile.d/opencv.sh
+echo "export CPLUS_INCLUDE_PATH=\"\$HOME/opencv/include/\"" >> $BUILD_DIR/.profile.d/opencv.sh
+echo "export LD_LIBRARY_PATH=\"\$HOME/opencv/lib/\"" >> $BUILD_DIR/.profile.d/opencv.sh
 echo "export PKG_CONFIG_PATH=\"\$HOME/opencv/lib/pkconfig/\"" >> $BUILD_DIR/.profile.d/opencv.sh
 echo "..." | indent
