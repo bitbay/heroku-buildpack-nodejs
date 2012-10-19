@@ -177,7 +177,7 @@ function install_opencv(){
   #cat $pcfile | awk -v tempdir=$VENDORED_OPENCV '{sub(/\/app/,tempdir)}; 1' > $pcfile
   cd $currentdir
 }
-################################################################################
+# bitbay #######################################################################
 function deploy_opencv(){
   echo "-----> Fetching and deploying opencv"
   mkdir -p "$BUILD_DIR/opencv"
@@ -197,7 +197,7 @@ function deploy_opencv(){
 function deploy_opencv_node(){
   echo "-----> Fetching and deploying opencv-node"
   mkdir -p "$BUILD_DIR/node_modules"
-  package="https://github.com/downloads/bitbay/opencv-node/opencv-node.tgz";
+  package="https://github.com/downloads/bitbay/opencv-node/opencv-node-0.2.4.tgz";
   curl $package -L -s -o - | tar xzf - -C $BUILD_DIR/node_modules >/dev/null 2>&1
   echo "opencv-node fetched" | indent
 }
@@ -207,7 +207,7 @@ VENDORED_OPENCV="$(mktmpdir opencv)"
 #install_cmake
 #install_opencv
 deploy_opencv
-################################################################################
+# bitbay-end ###################################################################
 
 bootstrap_node=$(mktmpdir bootstrap_node)
 package_download "nodejs" "0.4.7" $bootstrap_node
@@ -277,13 +277,13 @@ INCLUDE_PATH="$VENDORED_NODE/include"
 export CPATH="$INCLUDE_PATH"
 export CPPPATH="$INCLUDE_PATH"
 
-################################################################################
+# bitbay #######################################################################
 # cmake/opencv
-export C_INCLUDE_PATH="$BUILD_DIR/opencv/include/"
-export CPLUS_INCLUDE_PATH="$BUILD_DIR/opencv/include/"
+export C_INCLUDE_PATH="$BUILD_DIR/opencv/include/:$BUILD_DIR/opencv/include/opencv/:$BUILD_DIR/opencv/include/opencv2"
+export CPLUS_INCLUDE_PATH="$BUILD_DIR/opencv/include/:$BUILD_DIR/opencv/include/opencv/:$BUILD_DIR/opencv/include/opencv2"
 export LD_LIBRARY_PATH="$BUILD_DIR/opencv/lib/"
 export PKG_CONFIG_PATH="$BUILD_DIR/opencv/lib/pkgconfig/"
-################################################################################
+# bitbay-end ###################################################################
 
 # install dependencies with npm
 echo "-----> Installing dependencies with npm"
@@ -294,14 +294,16 @@ echo "Dependencies installed" | indent
 echo "-----> Building runtime environment"
 mkdir -p $BUILD_DIR/.profile.d
 echo "export PATH=\"\$HOME/bin:\$HOME/node_modules/.bin:\$PATH\"" > $BUILD_DIR/.profile.d/nodejs.sh
-################################################################################
+
+# bitbay #######################################################################
 # final monkeypatch opencv
 pcfile="$BUILD_DIR/opencv/lib/pkgconfig/opencv.pc"
 sed -ie "s~$BUILD_DIR/opencv~/app/opencv~g" $pcfile
-echo "export C_INCLUDE_PATH=\"\$HOME/opencv/include/\"" > $BUILD_DIR/.profile.d/opencv.sh
-echo "export CPLUS_INCLUDE_PATH=\"\$HOME/opencv/include/\"" >> $BUILD_DIR/.profile.d/opencv.sh
+echo "export C_INCLUDE_PATH=\"\$HOME/opencv/include/:\$HOME/opencv/include/opencv/:\$HOME/opencv/include/opencv2/\"" > $BUILD_DIR/.profile.d/opencv.sh
+echo "export CPLUS_INCLUDE_PATH=\"\$HOME/opencv/include/:\$HOME/opencv/include/opencv:\$HOME/opencv/include/opencv2/\"" >> $BUILD_DIR/.profile.d/opencv.sh
 echo "export LD_LIBRARY_PATH=\"\$HOME/opencv/lib/\"" >> $BUILD_DIR/.profile.d/opencv.sh
 echo "export PKG_CONFIG_PATH=\"\$HOME/opencv/lib/pkconfig/\"" >> $BUILD_DIR/.profile.d/opencv.sh
 echo "..." | indent
 # deploying opencv-node
 deploy_opencv_node
+# bitbay-end ###################################################################
