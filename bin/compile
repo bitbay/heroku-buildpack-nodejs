@@ -304,6 +304,7 @@ echo "export CPLUS_INCLUDE_PATH=\"\$HOME/opencv/include/:\$HOME/opencv/include/o
 echo "export LD_LIBRARY_PATH=\"\$HOME/opencv/lib/\"" >> $BUILD_DIR/.profile.d/opencv.sh
 echo "export PKG_CONFIG_PATH=\"\$HOME/opencv/lib/pkconfig/\"" >> $BUILD_DIR/.profile.d/opencv.sh
 echo "..." | indent
-# deploying opencv-node
-deploy_opencv_node
+# deploying opencv-node (thanks to florin@codeboost.github.com for accepting my
+# pull request with the latest add-ons on his opencv-node, this is now obsolete.
+#deploy_opencv_node
 # bitbay-end ###################################################################
